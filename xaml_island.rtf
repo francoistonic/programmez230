@@ -1,0 +1,215 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf400
+{\fonttbl\f0\fnil\fcharset0 Consolas;\f1\fnil\fcharset0 Calibri-Light;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue255;\red128\green128\blue128;\red0\green128\blue0;
+\red43\green145\blue175;\red163\green21\blue21;\red255\green0\blue0;}
+{\*\expandedcolortbl;;\csgenericrgb\c0\c0\c100000;\csgenericrgb\c50196\c50196\c50196;\csgenericrgb\c0\c50196\c0;
+\csgenericrgb\c16863\c56863\c68627;\csgenericrgb\c63922\c8235\c8235;\csgenericrgb\c100000\c0\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab708
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0\fs19 \cf2 using\cf0  System;\
+\cf2 using\cf0  System.Windows;\
+\cf2 using\cf0  Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT;\
+\cf2 using\cf0  windows = Windows;\
+\
+\cf2 namespace\cf0  Microsoft.Toolkit.Sample.Wpf.App\
+\{\
+    \cf3 ///\cf4  \cf3 <summary>\cf0 \
+    \cf3 ///\cf4  Interaction logic for MainWindow.xaml\cf0 \
+    \cf3 ///\cf4  \cf3 </summary>\cf0 \
+    \cf2 public\cf0  \cf2 partial\cf0  \cf2 class\cf0  \cf5 MainWindow\cf0  : Window\
+    \{\
+        \cf2 private\cf0  windows.UI.Xaml.Controls.ContentDialog _contentDialog;\
+\
+        \cf2 public\cf0  \cf5 MainWindow\cf0 ()\
+        \{\
+            InitializeComponent();\
+        \}\
+\
+        \cf2 private\cf0  \cf2 void\cf0  inkCanvas_Loaded(\cf2 object\cf0  sender, RoutedEventArgs e)\
+        \{\
+            inkCanvas.InkPresenter.InputDeviceTypes = \
+                CoreInputDeviceTypes.Mouse | \
+                CoreInputDeviceTypes.Pen | \
+                CoreInputDeviceTypes.Touch;\
+        \}\
+\
+        \cf2 private\cf0  \cf2 void\cf0  inkToolbar_Initialized(\cf2 object\cf0  sender, EventArgs e)\
+        \{\
+            \cf4 // Handle ink toolbar initialization events here\cf0 \
+        \}\
+\
+        \cf2 private\cf0  \cf2 void\cf0  inkToolbar_ActiveToolChanged(\cf2 object\cf0  sender, \cf2 object\cf0  e)\
+        \{\
+            \cf4 // Handle ink toolbar active tool changed events here.\cf0 \
+        \}\
+\
+        \cf2 private\cf0  \cf2 async\cf0  \cf2 void\cf0  myMap_Loaded(\cf2 object\cf0  sender, RoutedEventArgs e)\
+        \{\
+            \cf4 // Specify a known location.\cf0 \
+            BasicGeoposition cityPosition = \
+                \cf2 new\cf0  BasicGeoposition() \{ Latitude = 47.604, Longitude = -122.329 \};\
+            \cf2 var\cf0  cityCenter = \cf2 new\cf0  Geopoint(cityPosition);\
+\
+            \cf4 // Set the map location.\cf0 \
+            \cf2 await\cf0  myMap.TrySetViewAsync(cityCenter, 12).ConfigureAwait(\cf2 false\cf0 );\
+        \}\
+\
+        \cf2 private\cf0  \cf2 void\cf0  WindowsXamlHost_Loaded(\cf2 object\cf0  sender, RoutedEventArgs e)\
+        \{\
+            windows.UI.Xaml.Controls.StackPanel stackPanel = \cf2 new\cf0  windows.UI.Xaml.Controls.StackPanel()\
+            \{\
+                Background = \cf2 new\cf0  windows.UI.Xaml.Media.SolidColorBrush(windows.UI.Colors.Black),\
+            \};\
+\
+            stackPanel.Children.Add(\cf2 new\cf0  windows.UI.Xaml.Shapes.Rectangle()\
+            \{\
+                Width = 50,\
+                Height = 75,\
+                Fill = \cf2 new\cf0  windows.UI.Xaml.Media.SolidColorBrush(windows.UI.Colors.Blue),\
+            \});\
+\
+            stackPanel.Children.Add(\cf2 new\cf0  windows.UI.Xaml.Shapes.Rectangle()\
+            \{\
+                Width = 200,\
+                Height = 30,\
+                Fill = \cf2 new\cf0  windows.UI.Xaml.Media.SolidColorBrush(windows.UI.Colors.Red),\
+            \});\
+\
+            \cf2 var\cf0  button = \cf2 new\cf0  windows.UI.Xaml.Controls.Button()\
+            \{\
+                Width = 160,\
+                Height = 60,\
+                HorizontalAlignment = windows.UI.Xaml.HorizontalAlignment.Center,\
+                Content = \cf6 "ContentDialog UWP Button"\cf0 ,\
+            \};\
+            button.Tapped += Button_Tapped;\
+            stackPanel.Children.Add(button);\
+\
+            stackPanel.Children.Add(\cf2 new\cf0  windows.UI.Xaml.Shapes.Rectangle()\
+            \{\
+                Width = 25,\
+                Height = 100,\
+                Fill = \cf2 new\cf0  windows.UI.Xaml.Media.SolidColorBrush(windows.UI.Colors.Green),\
+            \});\
+\
+            windows.UI.Xaml.Controls.Flyout flyout = \cf2 new\cf0  windows.UI.Xaml.Controls.Flyout();\
+            flyout.Content = \cf2 new\cf0  windows.UI.Xaml.Controls.TextBlock()\
+                \{ Text = \cf6 "Flyout content"\cf0 , \};\
+\
+            \cf2 var\cf0  button2 = \cf2 new\cf0  windows.UI.Xaml.Controls.Button()\
+            \{\
+                Width = 300,\
+                Height = 40,\
+                HorizontalAlignment = windows.UI.Xaml.HorizontalAlignment.Center,\
+                Content = \cf6 "Long UWP Button with Flyout"\cf0 ,\
+                Flyout = flyout,\
+            \};\
+            stackPanel.Children.Add(button2);\
+\
+            \cf2 var\cf0  comboBox = \cf2 new\cf0  windows.UI.Xaml.Controls.ComboBox()\
+            \{\
+                HorizontalAlignment = windows.UI.Xaml.HorizontalAlignment.Center,\
+            \};\
+            comboBox.Items.Add(\cf6 "One"\cf0 );\
+            comboBox.Items.Add(\cf6 "Two"\cf0 );\
+            comboBox.Items.Add(\cf6 "Three"\cf0 );\
+            comboBox.Items.Add(\cf6 "Four"\cf0 );\
+            stackPanel.Children.Add(comboBox);\
+\
+            windows.UI.Xaml.Controls.Grid grid = \cf2 new\cf0  windows.UI.Xaml.Controls.Grid();\
+            stackPanel.Children.Add(grid);\
+\
+            _contentDialog = \cf2 new\cf0  windows.UI.Xaml.Controls.ContentDialog();\
+            _contentDialog.Content = \cf2 new\cf0  windows.UI.Xaml.Controls.TextBlock()\
+                \{ Text = \cf6 "ContentDialog content"\cf0 , \};\
+            stackPanel.Children.Add(_contentDialog);\
+\
+            \cf2 var\cf0  popup = \cf2 new\cf0  windows.UI.Xaml.Controls.Primitives.Popup()\
+            \{\
+                Width = 50,\
+                Height = 50,\
+                ShouldConstrainToRootBounds = \cf2 false\cf0 ,\
+                Child = \cf2 new\cf0  windows.UI.Xaml.Controls.TextBlock()\
+                    \{ Text = \cf6 "Popup child"\cf0 , \},\
+            \};\
+            grid.Children.Add(popup);\
+\
+            windowsXamlHost.Child = stackPanel;\
+            popup.IsOpen = \cf2 true\cf0 ;\
+        \}\
+\
+        \cf2 private\cf0  \cf2 async\cf0  \cf2 void\cf0  Button_Tapped(\cf2 object\cf0  sender, windows.UI.Xaml.Input.TappedRoutedEventArgs e)\
+        \{\
+            \cf2 await\cf0  _contentDialog.ShowAsync(windows.UI.Xaml.Controls.ContentDialogPlacement.Popup);\
+        \}\
+    \}\
+\}\
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f1\fs22 \cf0 \
+\
+\
+\
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0\fs19 \cf2 <\cf6 Window\cf7  x\cf2 :\cf7 Class\cf2 ="Microsoft.Toolkit.Sample.Wpf.App.MainWindow"\cf0 \
+       \cf7  xmlns\cf2 ="http://schemas.microsoft.com/winfx/2006/xaml/presentation"\cf0 \
+       \cf7  xmlns\cf2 :\cf7 x\cf2 ="http://schemas.microsoft.com/winfx/2006/xaml"\cf0 \
+       \cf7  xmlns\cf2 :\cf7 d\cf2 ="http://schemas.microsoft.com/expression/blend/2008"\cf0 \
+       \cf7  xmlns\cf2 :\cf7 mc\cf2 ="http://schemas.openxmlformats.org/markup-compatibility/2006"\cf0 \
+       \cf7  xmlns\cf2 :\cf7 xamlhost\cf2 ="clr-namespace:Microsoft.Toolkit.Wpf.UI.XamlHost;assembly=Microsoft.Toolkit.Wpf.UI.XamlHost"\cf0 \
+       \cf7  xmlns\cf2 :\cf7 controls\cf2 ="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls"\cf0 \
+       \cf7  xmlns\cf2 :\cf7 controls1\cf2 ="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls.WebView"\cf0 \
+       \cf7  xmlns\cf2 :\cf7 x1\cf2 ="clr-namespace:System.Windows.Markup;assembly=System.Xaml"\cf0 \
+       \cf7  mc\cf2 :\cf7 Ignorable\cf2 ="d"\cf0 \
+       \cf7  Title\cf2 ="MainWindow"\cf7  Height\cf2 ="450"\cf7  Width\cf2 ="800">\cf0 \
+    \cf2 <\cf6 Grid\cf2  >\cf0 \
+        \cf2 <\cf6 TabControl\cf2 >\cf0 \
+            \cf2 <\cf6 TabItem\cf2 >\cf0 \
+                \cf2 <\cf6 TabItem.Header\cf2 >\cf0 Ink Controls (Canvas / Toolbar)\cf2 </\cf6 TabItem.Header\cf2 >\cf0 \
+                \cf2 <\cf6 DockPanel\cf7  LastChildFill\cf2 ="True" >\cf0 \
+                    \cf2 <\cf6 controls\cf2 :\cf6 InkToolbar\cf0  \cf7  DockPanel.Dock\cf2 ="Top"\cf7  x\cf2 :\cf7 Name\cf2 ="inkToolbar"\cf0  \
+                       \cf7  Grid.Row\cf2 ="0"\cf7  TargetInkCanvas\cf2 ="\{\cf6 x1\cf2 :\cf6 Reference\cf7  Name\cf2 =inkCanvas\}"\cf0  \
+                       \cf7  Initialized\cf2 ="inkToolbar_Initialized"\cf0  \
+                       \cf7  ActiveToolChanged\cf2 ="inkToolbar_ActiveToolChanged">\cf0 \
+                        \cf2 <\cf6 controls\cf2 :\cf6 InkToolbarCustomToolButton\cf7  x\cf2 :\cf7 Name\cf2 ="toolButtonLasso" />\cf0 \
+                    \cf2 </\cf6 controls\cf2 :\cf6 InkToolbar\cf2 >\cf0 \
+                    \cf4 <!--Inking area -->\cf0 \
+                    \cf2 <\cf6 controls\cf2 :\cf6 InkCanvas\cf7  x\cf2 :\cf7 Name\cf2 ="inkCanvas"\cf7  DockPanel.Dock\cf2 ="Top"\cf7  Loaded\cf2 ="inkCanvas_Loaded"/>\cf0 \
+                \cf2 </\cf6 DockPanel\cf2 >\cf0 \
+            \cf2 </\cf6 TabItem\cf2 >\cf0 \
+            \cf2 <\cf6 TabItem\cf2 >\cf0 \
+                \cf2 <\cf6 TabItem.Header\cf2 >\cf0 Samples\cf2 </\cf6 TabItem.Header\cf2 >\cf0 \
+                \cf2 <\cf6 xamlhost\cf2 :\cf6 WindowsXamlHost\cf7  x\cf2 :\cf7 Name\cf2 ="windowsXamlHost"\cf7  Loaded\cf2 ="WindowsXamlHost_Loaded" />\cf0 \
+            \cf2 </\cf6 TabItem\cf2 >\cf0 \
+            \cf2 <\cf6 TabItem\cf2 >\cf0 \
+                \cf2 <\cf6 TabItem.Header\cf2 >\cf0 MediaPlayerElement\cf2 </\cf6 TabItem.Header\cf2 >\cf0 \
+                \cf2 <\cf6 controls\cf2 :\cf6 MediaPlayerElement\cf7  x\cf2 :\cf7 Name\cf2 ="mediaPlayerElement"\cf0 \
+                       \cf7  Source\cf2 ="https://mediaplatstorage1.blob.core.windows.net/windows-universal-samples-media/elephantsdream-clip-h264_sd-aac_eng-aac_spa-aac_eng_commentary-srt_eng-srt_por-srt_swe.mkv"\cf0 \
+                       \cf7  AutoPlay\cf2 ="True"\cf7  Margin\cf2 ="5"\cf7  HorizontalAlignment\cf2 ="Stretch"\cf0   \
+                       \cf7  VerticalAlignment\cf2 ="Stretch"\cf7  AreTransportControlsEnabled\cf2 ="True" />\cf0 \
+            \cf2 </\cf6 TabItem\cf2 >\cf0 \
+\
+            \cf2 <\cf6 TabItem\cf2 >\cf0 \
+                \cf2 <\cf6 TabItem.Header\cf2 >\cf0 WebView\cf2 </\cf6 TabItem.Header\cf2 >\cf0 \
+                \cf4 <!--WebBrowser /-->\cf0 \
+                \cf2 <\cf6 controls1\cf2 :\cf6 WebViewCompatible\cf7  Source\cf2 ="http://www.bing.com"\cf0  \
+                       \cf7  HorizontalAlignment\cf2 ="Stretch"\cf7  VerticalAlignment\cf2 ="Stretch"/>\cf0 \
+                \cf4 <!--WebBrowser Source="http://www.bing.com"/-->\cf0 \
+\
+            \cf2 </\cf6 TabItem\cf2 >\cf0 \
+            \cf2 <\cf6 TabItem\cf2 >\cf0 \
+                \cf2 <\cf6 TabItem.Header\cf2 >\cf0 MapControl\cf2 </\cf6 TabItem.Header\cf2 >\cf0 \
+                \cf2 <\cf6 controls\cf2 :\cf6 MapControl\cf7  x\cf2 :\cf7 Name\cf2 ="myMap"\cf7  Loaded\cf2 ="myMap_Loaded"/>\cf0 \
+            \cf2 </\cf6 TabItem\cf2 >\cf0 \
+        \cf2 </\cf6 TabControl\cf2 >\cf0 \
+    \cf2 </\cf6 Grid\cf2 >\cf0 \
+\cf2 </\cf6 Window\cf2 >\cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f1\fs22 \cf0 \
+\
+\
+}
